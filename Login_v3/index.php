@@ -72,8 +72,18 @@ if (login_check($mysqli) == true) {
 
     function checkLoginState() {
         FB.getLoginStatus(function(response) {
+
             if (response.status === 'connected') {
-                window.top.location = "redeem-offer.php";
+                FB.api('/me', { locale: 'en_US', fields: 'name, email,id' },
+                    function(response) {
+                        console.log(response);
+                        request = $.ajax({
+                            url: "includes/process_fb_login.php",
+                            type: "post",
+                            data: {email: response.email, name: response.name},
+                        });
+                    });
+                window.top.location = "includes/process_fb_login.php";
             }else{
                 alert("Failed to login");
             }
