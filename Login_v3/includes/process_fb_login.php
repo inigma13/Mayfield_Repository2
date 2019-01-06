@@ -2,13 +2,15 @@
 include_once 'db_connect.php';
 include_once 'psl-config.php';
 
-$error_msg = "";
-
-if (isset($_POST['name'], $_POST['email'], $_POST['id'])) {
-    // Sanitize and validate the data passed in
-    /*$name = $_POST['name'];
+//$error_msg = "";
+//if (isset($_POST['data'])) {//, $_POST['email'], $_POST['id'])) {
+print_r($_POST);
+var_dump($_POST);
+//}
+    /*// Sanitize and validate the data passed in
+    $name = $_POST['name'];
     $email = $_POST['response.email'];
-    $id = $_POST['response.id'];*/
+    $id = $_POST['response.id'];
     $name = $_POST['name'];
     echo($_POST['name']);
     $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
@@ -46,9 +48,9 @@ if (isset($_POST['name'], $_POST['email'], $_POST['id'])) {
     // TODO:
     // We'll also have to account for the situation where the user doesn't have
     // rights to do registration, by checking what type of user is attempting to
-    // perform the operation.
+    // perform the operation.*/
 
-    if (empty($error_msg)) {
+    /*if (empty($error_msg)) {
         $code = generateRandomString();
 
         // Insert the new user into the database
@@ -59,8 +61,8 @@ if (isset($_POST['name'], $_POST['email'], $_POST['id'])) {
             }
         }
         header('Location: ../redeem-offer.php');
-    }
-}
+    }*/
+
 function generateRandomString($length = 8) {
     $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);

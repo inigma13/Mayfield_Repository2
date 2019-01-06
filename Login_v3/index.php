@@ -2,6 +2,7 @@
 include_once 'includes/db_connect.php';
 include_once 'includes/functions.php';
 
+
 sec_session_start();
 
 if (login_check($mysqli) == true) {
@@ -13,6 +14,7 @@ if (login_check($mysqli) == true) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script type="text/JavaScript" src="js/sha512.js"></script>
     <script type="text/JavaScript" src="js/forms.js"></script>
     <title>Login V3</title>
@@ -43,6 +45,7 @@ if (login_check($mysqli) == true) {
 </head>
 <body>
 <script>
+
     // This is called with the results from from FB.getLoginStatus().
     function statusChangeCallback(response) {
         console.log('statusChangeCallback');
@@ -69,20 +72,19 @@ if (login_check($mysqli) == true) {
     // This function is called when someone finishes with the Login
     // Button.  See the onlogin handler attached to it in the sample
     // code below.
-
+var name
     function checkLoginState() {
         FB.getLoginStatus(function(response) {
 
             if (response.status === 'connected') {
                 FB.api('/me', { locale: 'en_US', fields: 'name, email,id' },
                     function(response) {
-                        console.log(response);
-                        request = $.ajax({
-                            url: "includes/process_fb_login.php",
-                            type: "post",
-                            data: {email: response.email, name: response.name},
-                        });
+                        name = response.name;
+                        var email = response.email;
+                        var id = response.id;
+
                     });
+                console.log(name);
                 window.top.location = "includes/process_fb_login.php";
             }else{
                 alert("Failed to login");
@@ -134,6 +136,23 @@ if (login_check($mysqli) == true) {
             console.log('Successful login for: ' + response.name);
         });
     }
+
+    function sendAJAX(){
+        $.ajax({
+            type : "POST",
+            url : 'includes/process_fb_login.php',
+            dataType : "text",
+            data : JSON.stringify(name),
+            success : function (data) {
+                alert(data); // show response from the php script.
+            },
+            error : function() {
+                alert("error");
+            }
+        });
+        console.log(name);
+        window.top.location = "includes/process_fb_login.php";
+    }
 </script>
 <?php
 if (isset($_GET['error'])) {
@@ -170,6 +189,10 @@ if (isset($_GET['error'])) {
                          data-button-type="continue_with" data-show-faces="false" data-auto-logout-link="false"
                          data-use-continue-as="true" data-scope="public_profile,email" action="checkLoginState()" ></div>
                 </div>
+                <div class="container-login100-form-btn">
+                <button onclick="sendAJAX()">
+                    POST
+                </button>
                 <div Class="login100-form-title">
                     <h6><i>or</i></h6>
                 </div>
